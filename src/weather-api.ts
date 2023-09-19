@@ -3,7 +3,8 @@ const weather = (() => {
     let data: any = JSON;
     try {
       const response = await fetch(
-        `http://api.weatherapi.com/v1/forecast.json?key=93e4c072ced84c15b5761151231909&q=${location}&days=3&aqi=no&alerts=no`
+        `http://api.weatherapi.com/v1/forecast.json?key=93e4c072ced84c15b5761151231909&q=${location}&days=3&aqi=no&alerts=no`,
+        {mode: 'cors'}
       );
       if (!response.ok) {
         throw new Error(`HTTP Error! Status error : ${response.status}`);
