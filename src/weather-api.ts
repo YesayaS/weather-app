@@ -1,10 +1,11 @@
-const Weather = () => {
-  let data:any = JSON;
+const weather = (() => {
+  const update = async (location: any) => {
+    console.log(location);
 
-  const update = async () => {
+    let data: any = JSON;
     try {
       const response = await fetch(
-        `http://api.weatherapi.com/v1/forecast.json?key=93e4c072ced84c15b5761151231909&q=London&days=3&aqi=no&alerts=no`
+        `http://api.weatherapi.com/v1/forecast.json?key=93e4c072ced84c15b5761151231909&q=${location}&days=3&aqi=no&alerts=no`
       );
       if (!response.ok) {
         throw new Error(`HTTP Error! Status error : ${response.status}`);
@@ -18,16 +19,7 @@ const Weather = () => {
       }
     }
   };
-
-  const get = () => {
-    if (data === JSON){
-        throw new Error('Empty data!')
-    }
-    return data;
-  };
-  return { update, get };
-};
-
-const weather = Weather();
+  return { update };
+})();
 
 export { weather };
