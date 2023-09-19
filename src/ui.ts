@@ -8,19 +8,14 @@ const ui = (() => {
   const update = async () => {
     let data: any = undefined;
     if (localStorage.getItem("data")) {
-      data = localStorage.getItem("data");
-      data = JSON.parse(data);
-      console.log("load from local Storage");
+      data = weather.load();
     } else {
       data = await weather.update("London");
-      localStorage.setItem("data", JSON.stringify(data));
-      console.log("create new data");
     }
 
     render(data);
   };
   const render = (data: any) => {
-    
     const fData = dataFilter(data);
     const renderAppText = `
         <div id="current">
@@ -60,9 +55,7 @@ const ui = (() => {
     document
       .querySelector(".input-location")
       ?.addEventListener("change", async (e: any) => {
-        console.log("location Change");
         const newData = await weather.update(e.target.value);
-        localStorage.setItem("data", JSON.stringify(newData));
         render(newData);
       });
   };
@@ -83,5 +76,7 @@ const ui = (() => {
   };
   return { update };
 })();
+
+
 
 export { ui };

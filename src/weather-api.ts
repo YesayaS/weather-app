@@ -1,7 +1,5 @@
 const weather = (() => {
   const update = async (location: any) => {
-    console.log(location);
-
     let data: any = JSON;
     try {
       const response = await fetch(
@@ -11,6 +9,8 @@ const weather = (() => {
         throw new Error(`HTTP Error! Status error : ${response.status}`);
       }
       data = await response.json();
+      localStorage.setItem("data", JSON.stringify(data));
+      localStorage.setItem("fetchTime", `${Date.now()}`);
       return data;
     } catch (e) {
       if (e instanceof ReferenceError) {
@@ -19,7 +19,21 @@ const weather = (() => {
       }
     }
   };
-  return { update };
+  const load = () => {
+    let data: any = localStorage.getItem("data");
+    data = JSON.parse(data);
+    const fetchTime = Number(localStorage.getItem("fetchTime"));
+    if (epochToMinute(fetchTime, Date.now()) >= 1) {
+      data = update(data.location.name);
+    }
+    return data;
+  };
+
+  return { update, load };
 })();
+
+function epochToMinute(epoch1: number, epoch2: number) {
+  return Math.round((epoch2 - epoch1) / 60000);
+}
 
 export { weather };
