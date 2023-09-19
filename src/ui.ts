@@ -1,8 +1,9 @@
 import { weather, epochToMinute } from "./weather-api";
 
 import "./style.css";
+import bgImage from "./bg-3.jpg"
 
-document.body;
+document.body.style.backgroundImage = `url(${bgImage})`;
 
 const ui = (() => {
   const load = async () => {
