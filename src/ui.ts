@@ -20,20 +20,35 @@ const ui = (() => {
     render(data);
   };
   const render = (data: any) => {
+    
     const fData = dataFilter(data);
     const renderAppText = `
-        <div><input class="location" type="text" value="${fData.city}, ${fData.country}"></div>
-        <div>${fData.localTime}</div>
-
-        <div class="main-condition">
-        <div>${fData.condition}</div>
-        <div>${fData.temp} ℃</div>
-        </div>
-
-        <div class="secondary-condition>
-        <div>feels like : ${fData.feelsLike} ℃</div>
-        <div>wind : ${fData.wind} kph</div>
-        <div>UV Index: ${fData.uv}</div>
+        <div id="current">
+            <div class="current__location-data">
+                <div class="current__location">
+                    <input class="input-location" type="text" value="${fData.city}, ${fData.country}">
+                </div>
+                <div class="current__local-time">${fData.localTime}</div>
+            </div>
+            <div class="current__main-condition">
+                <img class="current__condition-img" src=${fData.conditionImg}></img>
+                <div class="current__condition">${fData.condition}</div>
+                <div class="current__temp">${fData.temp} ℃</div>
+            </div>
+            <div class="current__secondary-condition">
+                <div class="secondary__container">
+                <div class="secondary-condition__title">Feels like</div>
+                <div class="current__feel-c seconddary-condition__data">${fData.feelsLike} ℃</div>
+                </div>
+                <div class="secondary__container">
+                <div class="secondary-condition__title">Wind</div>
+                <div class="current__wind seconddary-condition__data">${fData.wind} kph</div>
+                </div>
+                <div class="secondary__container">
+                <div class="secondary-condition__title">UV Index</div>
+                <div class="current__uv seconddary-condition__data">${fData.uv}</div>
+                </div>
+            </div>
         </div>
         
         `;
@@ -43,7 +58,7 @@ const ui = (() => {
 
   const locationInput = () => {
     document
-      .querySelector(".location")
+      .querySelector(".input-location")
       ?.addEventListener("change", async (e: any) => {
         console.log("location Change");
         const newData = await weather.update(e.target.value);
@@ -54,6 +69,7 @@ const ui = (() => {
 
   const dataFilter = (data: any) => {
     const filterData = {
+      conditionImg: data.current.condition.icon,
       condition: data.current.condition.text,
       city: data.location.name,
       country: data.location.country,
