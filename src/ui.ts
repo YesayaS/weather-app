@@ -1,20 +1,31 @@
-import { weather } from "./weather-api";
+import { weather, epochToMinute } from "./weather-api";
 
 import "./style.css";
 
 document.body;
 
 const ui = (() => {
-  const update = async () => {
+  const load = async () => {
     let data: any = undefined;
     if (localStorage.getItem("data")) {
       data = weather.load();
+      const updateTime = epochToMinute(
+        data.location.localtime_epoch,
+        Date.now()
+      );
+      if (updateTime >= 5) update();
     } else {
       data = await weather.update("London");
     }
-
     render(data);
   };
+
+  const update = async () => {
+    const city = weather.load().location.name;
+    const data = await weather.update(city);
+    render(data);
+  };
+
   const render = (data: any) => {
     const fData = dataFilter(data);
     const renderAppText = `
@@ -45,7 +56,6 @@ const ui = (() => {
                 </div>
             </div>
         </div>
-        
         `;
     document.querySelector<HTMLDivElement>("#app")!.innerHTML = renderAppText;
     locationInput();
@@ -74,9 +84,7 @@ const ui = (() => {
     };
     return filterData;
   };
-  return { update };
+  return { load, update };
 })();
-
-
 
 export { ui };

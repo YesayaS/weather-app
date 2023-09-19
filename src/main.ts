@@ -1,4 +1,9 @@
 import { ui } from "./ui";
 
 // localStorage.clear()
-ui.update();
+ui.load();
+
+window.setTimeout( () => {
+  ui.update();
+  window.location.reload();
+}, 30*60000);

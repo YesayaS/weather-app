@@ -10,7 +10,6 @@ const weather = (() => {
       }
       data = await response.json();
       localStorage.setItem("data", JSON.stringify(data));
-      localStorage.setItem("fetchTime", `${Date.now()}`);
       return data;
     } catch (e) {
       if (e instanceof ReferenceError) {
@@ -22,10 +21,6 @@ const weather = (() => {
   const load = () => {
     let data: any = localStorage.getItem("data");
     data = JSON.parse(data);
-    const fetchTime = Number(localStorage.getItem("fetchTime"));
-    if (epochToMinute(fetchTime, Date.now()) >= 1) {
-      data = update(data.location.name);
-    }
     return data;
   };
 
@@ -36,4 +31,4 @@ function epochToMinute(epoch1: number, epoch2: number) {
   return Math.round((epoch2 - epoch1) / 60000);
 }
 
-export { weather };
+export { weather, epochToMinute };
